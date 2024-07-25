@@ -15,7 +15,7 @@ const sellerSignup = async (req, res) => {
     //if user already exist
     const user = await Seller.findOne({ email });
     if (user) {
-      return res.status(409).send("Email is already Register");
+      return res.status(409).send({ msg: "Email is already Register" });
     }
     //hash Password
     const salt = await bcrypt.genSalt(10);
@@ -26,11 +26,11 @@ const sellerSignup = async (req, res) => {
       name,
       email,
       password: hashPassword,
-    //   role,
+      //   role,
     });
     res.status(201).json({ msg: "User Created Successfully", data: newSeller });
   } catch (error) {
-    res.status(400).send(`Bad Request ${error}`);
+    res.status(400).send({ msg: `Bad Request ${error}` });
   }
 };
 //login
@@ -40,7 +40,7 @@ const sellerLogin = async (req, res) => {
     //is User mail Exist?
     const isUser = await Seller.findOne({ email });
     if (!isUser) {
-      return res.status(401).send("Email is Incorrect");
+      return res.status(401).send({ msg: "Email is Incorrect" });
     }
     //is paswword Match?
     const isMatch = bcrypt.compare(password, isUser.password);
